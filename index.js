@@ -47,8 +47,28 @@ function loadMap(jArray){
   });
 
   var div = document.getElementById("myDiv");
-  Plotly.plot(div, data, layout);
+  Plotly.plot(div, data, layout)
+    .then(gd => {
+      gd.on('plotly_click', d => {
+        var pt = (d.points || [])[0]
+        console.log(pt);
+        redirectToBio(pt, jArray);
+      });
+    });
 }
 
+
+function redirectToBio(pt, jArray){
+  var person = findPerson(pt, jArray);
+  localStorage.setItem("person", JSON.stringify(person));
+  window.location.href = 'bio.html';
+}
+
+function findPerson(pt, jArray){
+  var people = jArray.filter(function( person ) {
+    return person.name == pt.text && person.lat_long[0] == pt.lat && person.lat_long[1] == pt.lon;
+  });
+  return people[0];
+}
 
 
