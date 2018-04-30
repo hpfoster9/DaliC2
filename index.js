@@ -2,8 +2,8 @@ function loadDoc() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      var obj = JSON.parse(this.responseText);
-      loadMap(obj);
+      jArray = JSON.parse(this.responseText);
+      filterMap();
     }
   };
   xhttp.open("GET", "http://mappy.dali.dartmouth.edu/members.json", true);
@@ -20,16 +20,39 @@ function Datapoint(name,lat,lon){
   this.text = [name];
 }
 
+function filterMap(){
+  var W17 = document.getElementById("17W").checked;
+  var S17 = document.getElementById("17S").checked;
+  var filter = jArray.slice();
+
+  if(W17){
+     filter = filter.filter(function( person ) {
+     return person.terms_on.indexOf("17W") > -1;
+     });
+  }
+  if(S17){
+    filter = filter.filter(function( person ) {
+     return person.terms_on.indexOf("17S") > -1;
+     });
+  }
+  loadMap(filter);
+}
+
+
+
 function loadMap(jArray){
   console.log(jArray);
+
   var layout = {
+    visible: false,
+    showlegend: false,
     autosize: true,
     hovermode:'closest',
     mapbox: {
       bearing:0,
       center: {
-        lat:45,
-        lon:-73
+        lat: 40,
+        lon:-95
       },
       pitch:0,
       zoom:3
@@ -47,7 +70,7 @@ function loadMap(jArray){
   });
 
   var div = document.getElementById("myDiv");
-  Plotly.plot(div, data, layout)
+  Plotly.newPlot(div, data, layout)
     .then(gd => {
       gd.on('plotly_click', d => {
         var pt = (d.points || [])[0]
