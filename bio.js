@@ -4,7 +4,8 @@ function fillBio(){
 
 	document.getElementById("name").innerHTML = person.name;
 	document.getElementById("message").innerHTML = person.message;
-	document.getElementById("website").innerHTML = person.url;
+	document.getElementById("website").href += person.url;
+	console.log(document.getElementById("website").href);
 	
 	for(var i=0; i<person.project.length; i++){
 		document.getElementById("projects").innerHTML += person.project[i]+", ";
@@ -17,4 +18,6 @@ function fillBio(){
 	}
 	var proj = document.getElementById("terms").innerHTML;
 	proj = proj.substring(0, proj.length-3);
+
+	document.getElementById("profpic").src += person.iconUrl;
 }
