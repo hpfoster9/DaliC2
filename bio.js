@@ -1,20 +1,23 @@
 function fillBio(){
 	var person = JSON.parse(localStorage.getItem("person"));
-	console.log(person);
 
 	document.getElementById("name").innerHTML = person.name;
 	document.getElementById("message").innerHTML = person.message;
+
+	//I had to do this because 'person.url.length' was giving a weird bug
 	var url = person.url;
 	var urlLength = url.length;
+
+	//Deals with the different url formats
+	//website html is initialized to 'http://mappy.dali.dartmouth.edu/'
 	if(person.url.substring(0,1) == "/"){
 		document.getElementById("website").href = "http://"+url.substring(2,urlLength);
 	}
 	else{
 		document.getElementById("website").href += url;
 	}
-
-	console.log(document.getElementById("website").href);
 	
+	//Fills in all projects and terms on. Then removes the trailing ', '
 	for(var i=0; i<person.project.length; i++){
 		document.getElementById("projects").innerHTML += person.project[i]+", ";
 	}
